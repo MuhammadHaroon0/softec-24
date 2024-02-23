@@ -10,11 +10,11 @@ const xssClean = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require('cookie-parser')
 const passport = require("passport");
-require('./utils/passport.js')
+require('./config/passport.js')
 const session = require('express-session')
 ///////////////////////////Files
 const AppError = require("./utils/AppError");
-app.use(express.static(__dirname + "public"));
+// app.use(express.static(__dirname + "public"));
 
 
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use(cors({
   credentials: true, // This allows cookies to be sent in CORS requests
 }));
 app.use(session({
-  secret: 'ooaauutthh',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
@@ -69,7 +69,7 @@ app.use(
 //ROUTERS
 const userRouter = require("./routes/userRoutes.js");
 const projectRouter = require("./routes/projectRoutes.js");
-const googleAuthRouter = require('./utils/googleauth.js')
+const googleAuthRouter = require('./config/googleauth.js')
 
 
 

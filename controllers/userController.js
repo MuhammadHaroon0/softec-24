@@ -19,10 +19,6 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     .limitFields();
   doc = await doc.query;
 
-  // console.log(result);
-
-  // if(result.length===0)
-  // return next(new AppError("Not found",404))
   return res.status(200).json(new Response("success", doc));
 });
 
