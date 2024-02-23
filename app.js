@@ -77,6 +77,10 @@ const googleAuthRouter = require('./config/googleauth.js')
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/projects", projectRouter);
 app.use("/", googleAuthRouter);
+
+app.get('/', async (req, res, next) => {
+  res.send("hello")
+})
 app.get('/api/v1', async (req, res, next) => {
   try {
     await res.sendFile(__dirname + '/index.html');
