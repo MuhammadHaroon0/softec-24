@@ -39,31 +39,3 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateMe = catchAsync(async (req, res, next) => {
-  if (req.file) req.body.image = req.file.fileName;
-  const doc = await userModel.findByIdAndUpdate(req.user.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  return res.status(200).json({
-    status: "success",
-    data: {
-      doc,
-    },
-  });
-});
-
-exports.uploadUserImage = imageMulter.single("image");
-
-exports.resizeUserImage = catchAsync(async (req, res, next) => {
-  // console.log(req.file.buffer);
-  if (!req.file) return next();
-
-  req.file.buffer = await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
-    .toBuffer()
-  // .toFile(`public/images/users/${req.file.fileName}`);
-  next();
-});

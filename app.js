@@ -70,35 +70,37 @@ app.use(
 const userRouter = require("./routes/userRoutes.js");
 const projectRouter = require("./routes/projectRoutes.js");
 const googleAuthRouter = require('./config/googleauth.js')
+const userProfileRouter = require('./routes/userProfileRoutes.js')
 
 
 
 //ROUTES
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/projects", projectRouter);
+app.use("/api/v1/userProfile", userProfileRouter);
 app.use("/", googleAuthRouter);
 
-app.get('/', async (req, res, next) => {
-  res.send("hello")
-})
-app.get('/api/v1', async (req, res, next) => {
-  try {
-    await res.sendFile(__dirname + '/index.html');
-  } catch (error) {
-    // Handle the error here
-    console.log(error);
-    next(new AppError(500, "Internal server error")); // Pass the error to the error-handling middleware
-  }
-});
-app.get('/api/v1/fail', async (req, res, next) => {
-  try {
-    await res.send("failed");
-  } catch (error) {
-    // Handle the error here
-    console.log(error);
-    next(new AppError(500, "Internal server error")); // Pass the error to the error-handling middleware
-  }
-});
+// app.get('/', async (req, res, next) => {
+//   res.send("hello")
+// })
+// app.get('/api/v1', async (req, res, next) => {
+//   try {
+//     await res.sendFile(__dirname + '/index.html');
+//   } catch (error) {
+//     // Handle the error here
+//     console.log(error);
+//     next(new AppError(500, "Internal server error")); // Pass the error to the error-handling middleware
+//   }
+// });
+// app.get('/api/v1/fail', async (req, res, next) => {
+//   try {
+//     await res.send("failed");
+//   } catch (error) {
+//     // Handle the error here
+//     console.log(error);
+//     next(new AppError(500, "Internal server error")); // Pass the error to the error-handling middleware
+//   }
+// });
 
 
 

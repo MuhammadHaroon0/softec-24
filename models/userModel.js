@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   contact: {
     type: String,
+    required: [true, "Contact is required"]
   },
   password: {
     type: String,
@@ -37,43 +38,34 @@ const userSchema = new mongoose.Schema({
         "Password must contain at least one letter, one number, and one special character.",
     },
   },
-  confirmPassword: {
-    type: String,
-    select: false,
-    validate: {
-      validator: function (val) {
-        return this.password === val;
-      },
-      message: "Passwords are not same",
-    },
-  },
   accountType: {
     type: String,
-    enum: ["user", "admin"],
-    default: "user",
+    enum: ["Fitness Enthusiast", "admin", "Fitness Professional"],
+    default: "Fitness Enthusiast",
   },
-
+  gender: {
+    type: String,
+    enum: ["Male", "Female"],
+    required: [true, "Gender is required"]
+  },
+  userProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "userProfile",
+  },
   active: {
     type: Boolean,
     default: true,
   },
-  // approve: {
-  //   type: Boolean,
-  //   default: true,
-  // },
-  image: {
-    type: String,
-    default: "https://res.cloudinary.com/djmlypicw/image/upload/v1708617027/wasxjb0nsscsgjrd59c4.jpg",
+  approve: {
+    type: Boolean,
+    default: false,
   },
   authMethod: {
     type: String,
     enum: ['google', 'self'],
     default: 'self'
   },
-  // projects: [{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Project"
-  // }],
+
   passwordResetToken: String,
   passwordResetTokenExpires: Date,
   lastChangedPassword: Date,

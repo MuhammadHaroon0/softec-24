@@ -8,17 +8,17 @@ const crypto = require("crypto");
 const { signToken } = require("../config/jwt");
 
 exports.signUp = catchAsync(async (req, res, next) => {
-  if (!req.body.password || !req.body.confirmPassword)
-    return next(new AppError("Please provide both password and confirm password!", 400));
+  if (!req.body.password)
+    return next(new AppError("Please provide password!", 400));
 
   const newUser = await userModel.create(req.body);
   const token = signToken(newUser._id, res);
 
-  // try {
-  //   await new Email(newUser).sendWelcome();
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  try {
+    await new Email(newUser).sendWelcome();
+  } catch (error) {
+    console.log(error);
+  }
 
   return res.status(200).json({
     status: "success",
@@ -64,6 +64,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   const token = req.header("x-auth-token") || req.cookies.jwt;
+  console.log(token);
   if (!token) return next(new AppError("Please provide auth token!", 401));
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -139,7 +140,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   if (!found) return next(new AppError("Token is invalid or expired!", 400));
 
   found.password = req.body.password;
-  found.confirmPassword = req.body.confirmPassword;
   found.passwordResetToken = undefined;
   found.passwordResetTokenExpires = undefined;
 
@@ -161,7 +161,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     return next(new AppError("Old password is incorrect!", 400));
 
   found.password = req.body.password;
-  found.confirmPassword = req.body.confirmPassword;
   await found.save();
 
   const token = signToken(found._id, res);

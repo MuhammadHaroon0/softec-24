@@ -26,7 +26,6 @@ const {
 } = require("../controllers/userController");
 
 const userModel = require("../models/userModel");
-const { uploadToCloudinary } = require("../utils/cloudinary");
 
 router.post("/signup", signUp);
 router.post("/login", login);
@@ -39,12 +38,10 @@ router
   .get(protect, getAllUsers)
   .post(protect, createOne(userModel))
   .delete(protect, deleteMe)
-  .patch(protect, uploadUserImage, resizeUserImage, uploadToCloudinary, updateMe);
 
 router
   .route("/:id")
-  .get(getOne(userModel, "projects"))
-  .patch(protect, restriction("admin"), updateOne(userModel))
-  .delete(protect, restriction("admin"), deleteOne(userModel));
+  .get(getOne(userModel, "userProfile"))
+  .delete(protect, deleteOne(userModel));
 
 module.exports = router;
